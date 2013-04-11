@@ -332,3 +332,17 @@ class Object(ParseResource):
             }
         self.__class__.PUT(self._absolute_url, **payload)
         self.__dict__[key] += amount
+
+    def delattr(self, key):
+        """
+        Remove a field from the object, both locally and immediately on Parse.com.
+        Does not wait for save to be called, so didn't replace __delattr__ method
+        """
+        payload = {
+            key: {
+                '__op': 'Delete'
+                }
+            }
+        self.__class__.PUT(self._absolute_url, **payload)
+        del self.__dict__[key]
+
