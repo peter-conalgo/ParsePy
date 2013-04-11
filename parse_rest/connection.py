@@ -14,11 +14,12 @@
 import urllib2
 import urllib
 import json
+import logging
 
 import core
 
 API_ROOT = 'https://api.parse.com/1'
-ACCESS_KEYS = {}
+ACCESS_KEYS = { 'debug': False }
 
 
 def register(app_id, rest_key, **kw):
@@ -83,6 +84,9 @@ class ParseBase(object):
         request.get_method = lambda: http_verb
 
         try:
+            if ACCESS_KEYS.get('debug'):
+                print '%s %s' % (http_verb, urllib.unquote(request.get_full_url()))
+
             response = urllib2.urlopen(request)
         except urllib2.HTTPError, e:
             exc = {
